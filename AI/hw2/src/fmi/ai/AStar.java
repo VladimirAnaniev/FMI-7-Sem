@@ -25,17 +25,9 @@ public class AStar {
 
             nextStates.stream()
                     .filter(Objects::nonNull)
-                    .forEach(state -> {
-                        if (wasStateClosed(closed, state)) {
-                            return;
-                        }
-
-                        if (isStateOpen(open, state)) {
-                            return;
-                        }
-
-                        addState(open, state);
-                    });
+                    .filter(state -> !wasBetterStateClosed(closed, state))
+                    .filter(state -> !isBetterStateOpen(open, state))
+                    .forEach(state -> addState(open, state));
 
             closed.add(current);
         }
@@ -47,12 +39,12 @@ public class AStar {
         return Arrays.asList(current.moveUp(), current.moveRight(), current.moveDown(), current.moveLeft());
     }
 
-    private static boolean wasStateClosed(Set<BoardState> closed, BoardState current) {
+    private static boolean wasBetterStateClosed(Set<BoardState> closed, BoardState current) {
         return closed.stream().anyMatch(
                 closedState -> closedState.equals(current) && closedState.getHeuristic() <= current.getHeuristic());
     }
 
-    private static boolean isStateOpen(Queue<BoardState> open, BoardState state) {
+    private static boolean isBetterStateOpen(Queue<BoardState> open, BoardState state) {
         return open.stream().anyMatch(openState -> openState.equals(state) && openState.getMoves() <= state.getMoves());
     }
 
