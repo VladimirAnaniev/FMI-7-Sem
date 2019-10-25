@@ -6,27 +6,41 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.jetbrains.annotations.NotNull;
+
 import javafx.util.Pair;
 
-public class BoardState {
+public class BoardState implements Comparable<BoardState> {
 
     private final Map<Integer, Pair<Integer, Integer>> board;
     private final int distance;
+    private final int moves;
+    private final BoardState parent;
 
-    private BoardState(Map<Integer, Pair<Integer, Integer>> board) {
+    private BoardState(Map<Integer, Pair<Integer, Integer>> board, int moves, BoardState parent) {
         this.board = board;
         this.distance = calculateDistance();
+        this.moves = moves;
+        this.parent = parent;
     }
 
     public int getDistance() {
         return distance;
     }
 
+    public int getMoves() {
+        return moves;
+    }
+
+    public int getHeuristic() {
+        return moves + distance;
+    }
+
     public static BoardState initial(List<List<Integer>> board) {
         assert board.size() == 3 : "Board should have 3 rows";
         assert board.stream().allMatch(row -> row.size() == 3) : "Each bord row should have 3 columns";
         // TODO: assert contains 0..8
-        return new BoardState(toMap(board));
+        return new BoardState(toMap(board), 0, null);
     }
 
     public BoardState moveUp() {
@@ -50,7 +64,7 @@ public class BoardState {
                         }
                 ));
 
-        return new BoardState(newBoard);
+        return new BoardState(newBoard, moves + 1, this);
     }
 
     public BoardState moveRight() {
@@ -74,7 +88,7 @@ public class BoardState {
                         }
                 ));
 
-        return new BoardState(newBoard);
+        return new BoardState(newBoard, moves + 1, this);
     }
 
     public BoardState moveDown() {
@@ -98,7 +112,7 @@ public class BoardState {
                         }
                 ));
 
-        return new BoardState(newBoard);
+        return new BoardState(newBoard, moves + 1, this);
     }
 
     public BoardState moveLeft() {
@@ -122,7 +136,12 @@ public class BoardState {
                         }
                 ));
 
-        return new BoardState(newBoard);
+        return new BoardState(newBoard, moves + 1, this);
+    }
+
+    @Override
+    public int compareTo(@NotNull BoardState boardState) {
+        return Integer.compare(getHeuristic(), boardState.getHeuristic());
     }
 
     private static Map<Integer, Pair<Integer, Integer>> toMap(List<List<Integer>> board) {
@@ -168,13 +187,12 @@ public class BoardState {
             return false;
         }
         BoardState that = (BoardState) o;
-        return distance == that.distance &&
-                Objects.equals(board, that.board);
+        return Objects.equals(board, that.board);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(board, distance);
+        return Objects.hash(board);
     }
 
     @Override
