@@ -1,6 +1,7 @@
 package fmi.ai;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Queue;
@@ -8,13 +9,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.intellij.util.containers.HashSetQueue;
-
 public class BeamSearch {
 
     public static int findShortestPath(BoardState initial, int n) {
         Set<BoardState> visited = new HashSet<>();
-        Queue<BoardState> open = new HashSetQueue<>();
+        Queue<BoardState> open = new LinkedList<>();
         open.add(initial);
 
         while (!open.isEmpty()) {
