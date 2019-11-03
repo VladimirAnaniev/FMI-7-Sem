@@ -24,6 +24,13 @@ public class Population {
         return new ArrayList<>(population);
     }
 
+//    Knapsack getOptimal() {
+////        Knapsack optimal =
+////        while (!population.isEmpty()) {
+////
+////        }
+//    }
+
     public static Population initial(List<Item> items, int populationSize, int maxWeight) {
         Queue<Knapsack> population = new PriorityQueue<>(Comparator.comparingInt(Knapsack::getValue));
         RandomGenerator knapsackRandom = new RandomGeneratorImpl(items.size());
@@ -36,21 +43,42 @@ public class Population {
         return new Population(population, items, populationRandom, maxWeight);
     }
 
-    public boolean evolve() {
+    public Knapsack getBestSolution() {
+        return population.stream().max(Comparator.comparingInt(Knapsack::getValue)).get();
+    }
+
+    public void optimize() {
+        int unchangedCount = 0;
+        int max = 0;
+
+        while(unchangedCount < 200) {
+            evolve();
+
+            int currentMax = getBestSolution().getValue();
+            if(currentMax == max) {
+                unchangedCount++;
+            } else {
+                unchangedCount = 0;
+                max = currentMax;
+            }
+        }
+    }
+
+    boolean evolve() {
         int firstIndex = rng.nextInt();
         int nextIndex = rng.nextInt();
 
         Knapsack evolved;
-        do {
-            Knapsack[] asArray = (Knapsack[]) population.toArray();
-            Knapsack first = asArray[firstIndex];
-            Knapsack second = asArray[nextIndex];
+//        do {
+            Object[] asArray = population.toArray();
+            Knapsack first = (Knapsack) asArray[firstIndex];
+            Knapsack second = (Knapsack) asArray[nextIndex];
 
             Knapsack crossover = first.crossover(second);
             evolved = crossover.mutate();
-        } while (evolved.isOverflowing());
+//        } while (evolved.isOverflowing());
 
-        if (evolved.getValue() > population.element().getValue()) {
+        if (!evolved.isOverflowing() && evolved.getValue() > population.peek().getValue()) {
             population.remove();
             population.add(evolved);
             return true;

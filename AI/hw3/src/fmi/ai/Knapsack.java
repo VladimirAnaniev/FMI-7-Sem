@@ -22,6 +22,10 @@ public final class Knapsack {
         return (BitSet) includedItems.clone();
     }
 
+    private boolean isEmpty() {
+        return includedItems.isEmpty();
+    }
+
     public static Knapsack random(RandomGenerator rng, List<Item> items, int maxSize) {
         Knapsack knapsack;
 
@@ -33,7 +37,7 @@ public final class Knapsack {
             IntStream.range(0, numberOfItems).map(i -> rng.nextInt()).forEach(bitSet::set);
 
             knapsack = new Knapsack(bitSet, items, rng, maxSize);
-        } while (knapsack.isOverflowing());
+        } while (knapsack.isOverflowing() || knapsack.isEmpty());
 
         return knapsack;
     }

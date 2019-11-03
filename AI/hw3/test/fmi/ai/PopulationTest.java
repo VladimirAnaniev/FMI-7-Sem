@@ -2,6 +2,8 @@ package fmi.ai;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 
 import org.junit.Test;
 
@@ -19,6 +21,14 @@ public class PopulationTest {
         population.getPopulation().forEach(knapsack -> assertFalse(knapsack.isOverflowing()));
     }
 
+    @Test
+    public void shouldGetPopulation() {
+        Population population = Population.initial(Item.getAll(), 30, 5000);
 
+        population.optimize();
+
+        Knapsack bestSolution = population.getBestSolution();
+        assertTrue(bestSolution.getValue() + " should be greater than 1400", bestSolution.getValue() > 1400);
+    }
 
 }
