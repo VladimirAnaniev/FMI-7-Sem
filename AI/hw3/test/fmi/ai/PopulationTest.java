@@ -22,13 +22,24 @@ public class PopulationTest {
     }
 
     @Test
-    public void shouldGetPopulation() {
+    public void bestSolutionShouldHaveValueOver1400() {
         Population population = Population.initial(Item.getAll(), 30, 5000);
 
         population.optimize();
 
         Knapsack bestSolution = population.getBestSolution();
         assertTrue(bestSolution.getValue() + " should be greater than 1400", bestSolution.getValue() > 1400);
+    }
+
+
+    @Test
+    public void bestSolutionShouldNotOverflow() {
+        Population population = Population.initial(Item.getAll(), 30, 5000);
+
+        population.optimize();
+
+        Knapsack bestSolution = population.getBestSolution();
+        assertFalse(bestSolution.isOverflowing());
     }
 
 }
