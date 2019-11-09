@@ -147,4 +147,25 @@ public class BoardTest {
         assertEquals(expectedCount, count);
     }
 
+    @Test
+    public void toStringShouldVisualizeCorrectly() {
+        Board board = Board.fromState(
+                Arrays.asList(
+                        Arrays.asList(O, X, X),
+                        Arrays.asList(X, O, O),
+                        Arrays.asList(X, O, X)
+                )
+        );
+
+        String expected = "-------------\n" +
+                          "| O | X | X |\n" +
+                          "-------------\n" +
+                          "| X | O | O |\n" +
+                          "-------------\n" +
+                          "| X | O | X |\n" +
+                          "-------------\n";
+
+        assertEquals(expected, board.toString());
+    }
+
 }

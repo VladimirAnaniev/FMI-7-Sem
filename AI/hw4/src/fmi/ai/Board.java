@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javafx.util.Pair;
@@ -71,7 +72,7 @@ public class Board {
         return availableMoves;
     }
 
-    private Board getNextState(int row, int col, CellState newState) {
+    public Board getNextState(int row, int col, CellState newState) {
         List<List<CellState>> newBoard = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             if (i == row) {
@@ -79,7 +80,7 @@ public class Board {
                 modifiedRow.set(col, newState);
                 newBoard.add(modifiedRow);
             } else {
-                newBoard.add(board.get(row));
+                newBoard.add(board.get(i));
             }
         }
 
@@ -137,5 +138,37 @@ public class Board {
 
     private boolean areEqual(List<CellState> cells) {
         return new HashSet<>(cells).size() == 1;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Board board1 = (Board) o;
+        return board.equals(board1.board);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(board);
+    }
+
+    @Override
+    public String toString() {
+        return  "-------------\n" +
+                toStringRow(board.get(0), 0) +
+                "-------------\n" +
+                toStringRow(board.get(1), 1) +
+                "-------------\n" +
+                toStringRow(board.get(2), 2) +
+                "-------------\n";
+    }
+
+    private String toStringRow(List<CellState> row, int r) {
+        return "| " + row.get(0) + " | " + row.get(1) + " | " + row.get(2) + " |\n";
     }
 }
