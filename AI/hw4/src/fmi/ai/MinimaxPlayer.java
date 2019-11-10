@@ -5,13 +5,14 @@ import static fmi.ai.Winner.*;
 import java.util.List;
 
 public class MinimaxPlayer {
+
     public static Board getBestMove(Board board) {
         Board bestMove = null;
         int bestMoveValue = Integer.MIN_VALUE;
 
         List<Board> nextMoves = board.getNextMoves(CellState.O);
         for (Board availableMove : nextMoves) {
-            int value = minimax(availableMove, false);
+            int value = minimax(availableMove, false, Integer.MIN_VALUE, Integer.MAX_VALUE);
             if (value > bestMoveValue) {
                 bestMoveValue = value;
                 bestMove = availableMove;
@@ -21,7 +22,7 @@ public class MinimaxPlayer {
         return bestMove;
     }
 
-    private static int minimax(Board board, boolean maximizing) {
+    private static int minimax(Board board, boolean maximizing, int alpha, int beta) {
         if (board.getWinner() == X) {
             return -10;
         }
@@ -32,26 +33,28 @@ public class MinimaxPlayer {
             return 0;
         }
 
-        if (maximizing) {
-            return maximize(board);
-        } else {
-            return minimize(board);
+        int best = 0;
+
+        for (Board nexMove : getNextMoves(board, maximizing)) {
+            int value = minimax(nexMove, !maximizing, alpha, beta);
+
+            if (maximizing) {
+                best = Integer.max(best, value);
+                alpha = Integer.max(alpha, best);
+            } else {
+                best = Integer.min(best, value);
+                beta = Integer.min(beta, best);
+            }
+
+            if (alpha > beta) {
+                break;
+            }
         }
+
+        return best;
     }
 
-    private static int maximize(Board board) {
-        return board.getNextMoves(CellState.O)
-                .stream()
-                .map(availableMove -> minimax(availableMove, false))
-                .max(Integer::compare)
-                .orElse(Integer.MIN_VALUE);
-    }
-
-    private static int minimize(Board board) {
-        return board.getNextMoves(CellState.X)
-                .stream()
-                .map(availableMove -> minimax(availableMove, true))
-                .min(Integer::compare)
-                .orElse(Integer.MAX_VALUE);
+    private static List<Board> getNextMoves(Board board, boolean isMaximizing) {
+        return board.getNextMoves(isMaximizing ? CellState.O : CellState.X);
     }
 }
