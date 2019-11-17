@@ -5,7 +5,43 @@ export class Maze {
       this.teleports = this.extractTeleports(maze);
    }
 
-   getShortestPath(start: [number, number], end: [number, number]): Array<[number, number]> {
+   depthLimited(start: [number, number], end: [number, number], limit: number): Array<[number, number]> {
+      return this.getPath([start], end, 0, [], limit)
+   }
+
+   private getPath(path: Array<[number, number]>, end: [number, number], depth: number, visited: Array<[number, number]>, limit: number): Array<[number, number]> {
+      const last = path[path.length - 1];
+      if(this.areEqual(path[path.length - 1], end)) {
+         return path;
+      }
+      if(depth === limit) {
+         return [];
+      }
+
+
+      const nextPositions = this.getNextPositions(last);
+
+      for (let nextPosition of nextPositions) {
+         if(this.isAvailable(nextPosition) && visited.every(pos => !this.areEqual(pos, nextPosition))) {
+            let foundPath: Array<[number, number]> = [];
+
+            if (this.isTeleport(nextPosition)) {
+               const destination = this.getTeleportDestination(nextPosition);
+               foundPath = this.getPath([...path, nextPosition, destination], end, depth + 2, [...visited, last, nextPosition], limit);
+            } else {
+               foundPath = this.getPath([...path, nextPosition], end, depth + 1, [...visited, last], limit);
+            }
+
+            if (foundPath && foundPath.length) {
+               return foundPath;
+            }
+         }
+      }
+
+      return [];
+   }
+
+   bfs(start: [number, number], end: [number, number]): Array<[number, number]> {
       const visited: Array<[number, number]> = [start];
       const queue: Array<Array<[number, number]>> = [[start]];
 
