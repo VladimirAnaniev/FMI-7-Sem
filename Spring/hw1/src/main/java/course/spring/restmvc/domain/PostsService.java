@@ -12,7 +12,7 @@ public interface PostsService {
 
     Post add(Post post);
 
-    Post update(Post post);
+    Post update(String postId, Post post);
 
     Post remove(String postId);
 }

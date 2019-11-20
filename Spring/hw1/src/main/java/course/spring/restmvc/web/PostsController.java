@@ -38,17 +38,29 @@ public class PostsController {
     }
 
     @GetMapping("{id}")
-    public Post getPost(@PathVariable("id") String postId) {
-        return postsService.findById(postId); // TODO: 404 if not found
+    public ResponseEntity<Post> getPost(@PathVariable("id") String postId) {
+        Post post = postsService.findById(postId);
+        if (post == null) {
+            ResponseEntity.notFound();
+        }
+        return ResponseEntity.ok(post);
     }
 
     @PutMapping("{id}")
-    public Post updatePost(@PathVariable("id") String postId, @RequestBody Post post) {
-        return postsService.update(post); // TODO: 404 if not found
+    public ResponseEntity<Post> updatePost(@PathVariable("id") String postId, @RequestBody Post post) {
+        Post updated = postsService.update(postId, post);
+        if (updated == null) {
+            ResponseEntity.notFound();
+        }
+        return ResponseEntity.ok(post);
     }
 
     @DeleteMapping("{id}")
-    public Post deletePost(@PathVariable("id") String postId) {
-        return postsService.remove(postId); // TODO 204 if not found
+    public ResponseEntity<Post> deletePost(@PathVariable("id") String postId) {
+        Post deleted = postsService.remove(postId);
+        if (deleted == null) {
+            ResponseEntity.noContent();
+        }
+        return ResponseEntity.ok(deleted);
     }
 }

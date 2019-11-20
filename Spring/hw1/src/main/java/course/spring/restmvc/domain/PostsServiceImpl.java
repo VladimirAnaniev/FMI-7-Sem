@@ -21,7 +21,7 @@ public class PostsServiceImpl implements PostsService {
 
     @Override
     public Post findById(String postId) {
-        return postsRepository.findById(postId).orElse(null); // TODO orElseThrow;
+        return postsRepository.findById(postId).orElse(null);
     }
 
     @Override
@@ -30,14 +30,25 @@ public class PostsServiceImpl implements PostsService {
     }
 
     @Override
-    public Post update(Post post) {
+    public Post update(String postId, Post post) {
+        // TODO: assert postId == post.getId()
+        if (exists(postId)) {
+            return null;
+        }
         return postsRepository.save(post);
     }
 
     @Override
     public Post remove(String postId) {
-        Post post = postsRepository.findById(postId).orElse(null); // TODO orElseThrow
+        Post post = findById(postId);
+        if (post == null) {
+            return null;
+        }
         postsRepository.delete(post);
         return post;
+    }
+
+    private boolean exists(String postId) {
+        return postsRepository.existsById(postId);
     }
 }
