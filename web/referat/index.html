@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Web Performance Best Practices</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+
+<body>
+    <aside class="sidenav">
+        <div class="header">Web Performance Best Practices</div>
+        <a href="#intro">Въведение</a>
+        <a href="#why-does-perfomance-matter">Защо производителността е важна?</a>
+        <div class="header">Как измерваме производителността?</div>
+        <a href="#first-contentful-paint">First Contentful Paint</a>
+        <a href="#largest-contentful-paint">Largest Contentful Paint</a>
+        <a href="#time-to-interactive">Time to Interactive</a>
+
+        <div class="header">Добри Практики</div>
+        <a href="#remove-unused-javascript">Премахнване на неизползван JavaScript код</a>
+        <a href="#minify-and-compress-playloads">Минифицирайте и компресирайте ресурсите по мрежата</a>
+        <a href="#code-splitting">Намалете количеството Javascript с Code Splitting</a>
+        <a href="#defer-non-critical-css">Зареждайте некритичен css по-късно</a>
+        <a href="#inline-critical-css">Вградете критичния css в документа</a>
+
+        <a href="#apendix">Източници</a>
+    </aside>
+
+    <main>
+        <div class="container">
+            <header>Web Performance Best Practices</header>
+            <section id="intro">
+
+                <h1>Въведение</h1>
+                <p>
+                    С навлизането на модерните уеб технологии и стремежа ни да накараме приложенията ни да правят
+                    повече, често срещаме проблеми с производеителността. Днешните сайтове имат повече функционалности
+                    от всякога. Всичката тази функционалност обаче идва с цена - в най-добрия случай потребителите ни ще
+                    трябва да изяакат малко повече докато могат да използват продукта ни. В най-лошия случай обаче те
+                    правят нашия сайт напълно неизползваем или нереагиращ на действията на протребителя.
+            </section>
+            <section id="why-does-perfomance-matter">
+                <h1>Защо производителността е важна?</h1>
+                <p>
+                    Потребителите все повече използват на мобилни устройства за достъп до уеб съдържание и услуги. Това
+                    значи че ние трябва да оптимизираме нашите сайтове дори за не толкова мощните устройства, от които
+                    нашите потребители могат да достъпят сайта ни. Потребителите също са по-взискателни от всякога и
+                    когато използват нашия сайт го сравняват с не само с кункурентите ни, но и с най-добрите услуги
+                    които използват.
+                </p>
+                <p class="highlight">
+                    Оптимизирането на скоростта на вашия сайт може също така да го направи достъпен за потребители,
+                    които имат по-бавни мрежови връзки и не са имали достъп до него преди.
+                </p>
+                <p>
+                    Що се отнася до потребителското изживяване, скоростта има значение. А забавянето, причинено от
+                    скоростта на мобилните устройства, не е само разочароващо, но може да има отрицателно въздействие и
+                    върху резултатите на бизнеса ни. Например, една секунда забавяне навремето за зареждане може да
+                    повлияе на процента на продажбите ни с до 20%.
+                </p>
+                <img id="speed-conversion-ratio" src="img/speed-conversion-impact.jpg"
+                    alt="Image showing how a one-second delay in mobile load times can impact conversion rates by up to 20%" />
+                <span><br>[X] Why does speed matter? https://web.dev/why-speed-matters/</span>
+            </section>
+        </div>
+
+        <div class="container">
+            <header>Как измерваме производителността?</header>
+            <div class="highlight">
+                Зареждането не е един-единствен момент във времето - това е процес, който никой показател не може да
+                улови напълно. Има много моменти по време на зареждането, които могат да повлияят на това дали
+                потребителят го възприема като "бърз" или "бавен".
+            </div>
+            <section id="first-contentful-paint">
+                <h1>First Paint vs First Contentful Paint</h1>
+                <p>
+                    <strong>First Paint</strong> измерва времето от навигацията до времето, когато в браузъра рендерира
+                    нещо (каквото и да е). Това може да е нещо малко и неинформативно като промяна в цвета на фона.
+                </p>
+                <img src="img/first-paint-example.png" />
+                <p>
+                    Тази метрика не е особено полезна понеже това първо рендериране не носи никаква информация на
+                    потребителя и сърържанието на страницата още не е заредено.
+                </p>
+                <hr>
+                <p>
+                    <strong>First Contentful Paint (FCP)</strong> измерва времето от навигацията до времето, когато
+                    браузърът визуализира първата част от съдържанието от DOM дървото. Това е важен етап за
+                    потребителите, защото им дава част от съдържанието на страницата, което те могат да консумират. Също
+                    индикира, че сайтът ни наистина се зарежда.
+                </p>
+                <img src="img/first-contentful-paint-example.png" />
+
+            </section>
+
+            <section id="largest-contentful-paint">
+                <h1>Largest Contentful Paint</h1>
+                <p>
+                    <strong>Largest COntentful Paint (LCP)</strong> ТОДО: обяснение какво измерва и с какво се различава
+                    от FP и FCP
+                </p>
+                <img src="img/largest-contentful-paint.png" />
+            </section>
+
+            <section id="time-to-interactive">
+                <h1>Time to Interactive</h1>
+                <p>
+                    <strong>Time to Interactive (LCP)</strong> ТОДО: обяснение какво измерва и с какво се различава :)
+                </p>
+                <img src="img/perf-metrics-load-timeline.png" />
+            </section>
+        </div>
+
+        <div class="container">
+            <header>Добри практики</header>
+            <section id="remove-unused-javascript">
+                <h1>Премахнване на неизползван JavaScript код</h1>
+                <p>
+                    TODO: изглежда очевидно, но е голям проблем. (може да се покаже статистика) Как да видим какво не се
+                    използва?
+                </p>
+            </section>
+
+            <section id="minify-and-compress-playloads">
+                <h1>Минифицирайте и компресирайте ресурсите по мрежата</h1>
+                <p>
+                    TODO: За големи приложения пращаме килобайти (мегабайти) JS и CSS по мрежата. За да намалим размера
+                    можем да минифицираме (намаляваме възможно най-много сорс кода) и компресираме файловете преди да ги
+                    изпратим на клиента.
+                </p>
+            </section>
+
+            <section id="code-splitting">
+                <h1>Намалете количеството Javascript с Code Splitting</h1>
+                <p>
+                    Не всичкият javascript за сайта ни е нужен при първоначалното зареждане на страницата. Можем да
+                    разделим кода на модули, които да се зареждат динамично когато са нужни. TODO: покажи пример с
+                    dynamic imports
+                </p>
+            </section>
+
+            <section id="defer-non-critical-css">
+                <h1>Зареждайте некритичен css по-късно</h1>
+                <p>
+                    CSS е render blocking и ако можем да го приложим по-късно е по-добре за performance (TODO: обясни
+                    какво значи render blocking) Дай пример как се прилага
+                </p>
+            </section>
+
+            <section id="inline-critical-css">
+                <h1>Вградете критичния css в документа</h1>
+                <p>
+                    CSS is render blocking (again). Когато импортваме css браузъра трябва да го изчака да се зареди по
+                    мрежата преди да продължи. За да забързаме този процес е добре най-важния css да бъде вграден в html
+                    документа. Ако се комбинира с горната точка получаваме бонус точки.
+
+                </p>
+            </section>
+
+        </div>
+
+        <div class="container">
+
+            <section id="apendix">
+                <h1 id="resources">Източници</h1> // TODO: направи anchor-и, добави своите източници :) [1]
+                http://code.google.com/speed/page-speed/docs/rules_intro.html [2]
+                https://webdesign.tutsplus.com/articles/best-practices-for-increasing-website-performance--webdesign-9109
+                [3] https://developers.google.com/speed/docs/insights/about [4]
+                https://developers.google.com/speed/docs/insights/v2/getting-started [5]
+                https://developers.google.com/speed/articles/compressing-javascript [6]
+                https://developers.google.com/speed/articles/optimizing-javascript [7]
+                https://developers.google.com/speed/articles/reflow [8]
+                https://developers.google.com/speed/articles/usability-latency
+            </section>
+        </div>
+
+    </main>
+
+</body>
+
+</html>
