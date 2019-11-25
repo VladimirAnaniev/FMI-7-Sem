@@ -12,7 +12,7 @@ public interface UsersService {
 
     User add(User user);
 
-    User update(User user);
+    User update(String userId, User user);
 
     User remove(String userId);
 }

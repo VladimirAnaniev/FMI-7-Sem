@@ -1,6 +1,7 @@
 package course.spring.restmvc.domain;
 
 import course.spring.restmvc.dao.PostsRepository;
+import course.spring.restmvc.exception.EntityNotFoundException;
 import course.spring.restmvc.model.ErrorResponse;
 import course.spring.restmvc.model.Post;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,8 @@ public class PostsServiceImpl implements PostsService {
 
     @Override
     public Post findById(String postId) {
-        return postsRepository.findById(postId).orElse(null);
+        return postsRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("Post with id '" + postId + "' does not exist!"));
     }
 
     @Override
@@ -31,24 +33,19 @@ public class PostsServiceImpl implements PostsService {
 
     @Override
     public Post update(String postId, Post post) {
-        // TODO: assert postId == post.getId()
-        if (exists(postId)) {
-            return null;
-        }
+        Post dbPost = findById(postId);
+        dbPost.setActive(post.isActive());
+        dbPost.setAuthor(post.getAuthor());
+        dbPost.setContent(post.getContent());
+        dbPost.setTags(post.getTags());
+        dbPost.setTitle(post.getTitle());
         return postsRepository.save(post);
     }
 
     @Override
     public Post remove(String postId) {
         Post post = findById(postId);
-        if (post == null) {
-            return null;
-        }
         postsRepository.delete(post);
         return post;
-    }
-
-    private boolean exists(String postId) {
-        return postsRepository.existsById(postId);
     }
 }

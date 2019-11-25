@@ -40,16 +40,16 @@ public class UsersController {
 
     @GetMapping("{id}")
     public User getUser(@PathVariable("id") String userId) {
-        return usersService.findById(userId); // TODO: 404 if not found
+        return usersService.findById(userId);
     }
 
     @PutMapping("{id}")
     public User updateUser(@PathVariable("id") String userId, @RequestBody User user) {
-        return usersService.update(user); // TODO: 404 if not found
+        return usersService.update(userId, user);
     }
 
     @DeleteMapping("{id}")
     public User deleteUser(@PathVariable("id") String userId) {
-        return usersService.remove(userId); // TODO 204 if not found
+        return usersService.remove(userId);
     }
 }
