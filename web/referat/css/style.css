@@ -63,17 +63,9 @@ h2 {
 }
 
 header {
-   /* height: 70px; */
    width: 100%;
    font-size: 3rem;
    line-height: 3rem;
-   /* background-color: #e6e6e6; */
-   /* border-bottom: 1px solid lightgray; */
-   /* z-index: -10; */
-   /* margin: auto; */
-   /* padding-top: 2px; */
-   /* padding-bottom: 2px; */
-   /* position: relative; */
 }
 
 li {
@@ -137,20 +129,20 @@ section {
 }
 
 .sidenav a:hover,
-.sidenav a:active {
+.sidenav a.active {
    background-color: #0065ab;
 }
 
-span {
+.subtext {
    font-style: italic;
    font-size: 16px;
    color: #A6D8E7;
 }
 
-strong {
+/* strong {
    background-color: #FFB38F;
    font-weight: bold;
-}
+} */
 
 img {
    width: 100%;
@@ -164,4 +156,8 @@ img {
 header {
     font-size: 3rem;
     background: none;
+}
+
+.snippet {
+   color: #d4af37;
 }
