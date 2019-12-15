@@ -1,69 +1,39 @@
 package fmi.ai;
 
-import static java.util.stream.Collectors.toList;
-
-import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
-import java.util.Random;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-import weka.core.EuclideanDistance;
-import weka.core.Instance;
-import weka.core.Instances;
-import weka.core.converters.ConverterUtils;
-import weka.filters.unsupervised.attribute.Normalize;
+import fmi.ai.algorithms.Clusterizer;
+import fmi.ai.iris.Iris;
+import fmi.ai.iris.IrisNormalizer;
+import fmi.ai.iris.IrisParser;
 
 public class Main {
-    private static String datasetPath = "resources/iris.arff";
 
-    public static void main(String[] args) throws Exception {
-        ConverterUtils.DataSource source = new ConverterUtils.DataSource(datasetPath);
-        Instances dataSet = source.getDataSet();
-        dataSet.setClassIndex(dataSet.numAttributes() - 1);
+    public static void main(String[] args) {
+        String datasetPath = "resources/iris.arff";
+        Dataset<Iris> dataset = IrisParser.parse(datasetPath);
+        IrisNormalizer normalizer = new IrisNormalizer(dataset);
+        Dataset<Iris> normalized = normalizer.normalize();
 
-        Normalize filterNorm = new Normalize();
-        filterNorm.setInputFormat(dataSet);
+        /**
+         * Classification Example
+         */
+        //        Classifier<Iris> classifier = new Classifier<>(normalized, 5);
+        //
+        //        Iris random = normalized.getRandomEntity();
+        //        Entity.EntityCategory classified = classifier.classify(random);
+        //        System.out.println(random.getCategory() + " " + classified);
 
-        EuclideanDistance distance = new EuclideanDistance(dataSet);
-
-        dataSet.randomize(new Random());
-
-        int trainSetSize = (int) Math.round(dataSet.numInstances() * 0.9);
-        int testSetSize = dataSet.numInstances() - trainSetSize;
-
-        Instances train = new Instances(dataSet, 0, trainSetSize);
-        Instances test = new Instances(dataSet, trainSetSize, testSetSize);
-
-        int errors = 0;
-
-        for (int i = 0; i < testSetSize; i++) {
-            Instance current = test.instance(i);
-            List<Instance> closestInstances = IntStream.range(0, trainSetSize)
-                    .mapToObj(train::instance)
-                    .sorted(Comparator.comparingDouble(a -> distance.distance(a, current)))
-                    .limit(5)
-                    .collect(toList());
-
-
-            Double mostFrequent = closestInstances.stream()
-                    .map(Instance::classValue)
-                    .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-                    .entrySet()
-                    .stream()
-                    .max(Comparator.comparing(Map.Entry::getValue))
-                    .get()
-                    .getKey();
-
-
-            if (Double.compare(mostFrequent, current.classValue()) != 0) {
-                System.out.println(String.format("Expected %.0f, but was %.0f", current.classValue(), mostFrequent));
-                errors++;
-            }
-        }
-
-        System.out.println(String.format("Number of errors: %d", errors));
+        /**
+         * Clusterization example
+         */
+        Clusterizer clusterizer = new Clusterizer(normalized, 3);
+        Map<Integer, Dataset<Iris>> grouped = clusterizer.clusterize();
+        grouped.entrySet().forEach(entry -> {
+            System.out.println(entry.getKey());
+            entry.getValue().getData().forEach(item -> {
+                System.out.println("    " + item.getCategory());
+            });
+        });
     }
 }
