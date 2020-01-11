@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Registration</title>
+  <script type="text/javascript" src="validator.js"></script>
+</head>
+<body>
+
+    <form name="registration" id="registrationForm">
+        <p>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username">
+        </p>
+        <p>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password">
+        </p>
+        <p>
+            <label for="repeatPassword">Repeat Password:</label>
+            <input type="password" id="repeatPassword" name="repeatPassword">
+        </p>
+
+        <input id="submit" type="submit" name="submit" />
+    </form>
+
+    <div id="validationMessage"></div>
+
+</body>
+</html>
