@@ -20,16 +20,16 @@ public class Neuron {
         return activation;
     }
 
-    public void updateConnection(Neuron neuron, Double value) {
-        connections.put(neuron, value);
-    }
+//    public void updateConnection(Neuron neuron, Double value) {
+//        connections.put(neuron, value);
+//    }
 
     public void calculateActivation() {
         double sum = connections.entrySet().stream()
-                .map(neuron -> neuron.getKey().getActivation() * neuron.getValue())
+                .map(entry -> entry.getKey().getActivation() * entry.getValue())
                 .reduce(0d, Double::sum);
 
-        setActivation(1 / (1 - Math.pow(Math.E, -sum)));
+        setActivation(1 / (1 + Math.pow(Math.E, -sum)));
     }
 
     public void setInitialError(Double actualValue) {
@@ -51,21 +51,21 @@ public class Neuron {
         });
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Neuron neuron = (Neuron) o;
-        return Objects.equals(connections, neuron.connections) &&
-                Objects.equals(activation, neuron.activation);
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) {
+//            return true;
+//        }
+//        if (o == null || getClass() != o.getClass()) {
+//            return false;
+//        }
+//        Neuron neuron = (Neuron) o;
+//        return Objects.equals(connections, neuron.connections) &&
+//                Objects.equals(activation, neuron.activation);
+//    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(connections, activation);
-    }
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(connections, activation);
+//    }
 }

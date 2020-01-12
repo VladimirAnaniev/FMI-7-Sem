@@ -2,8 +2,10 @@ package fmi.ai;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -60,8 +62,11 @@ public class NeuralNetwork {
 
         List<Neuron> layer = new ArrayList<>();
         for (int i = 0; i < neurons; i++) {
-            Map<Neuron, Double> connections = previousLayer.stream().collect(
-                    Collectors.toMap(Function.identity(), a -> random.nextDouble(1) - 0.5));
+            Map<Neuron, Double> connections = new HashMap<>();
+            if (previousLayer != null && !previousLayer.isEmpty()) {
+                connections = previousLayer.stream().collect(
+                        Collectors.toMap(Function.identity(), a -> random.nextDouble(1) - 0.5));
+            }
             Neuron neuron = new Neuron(connections);
             layer.add(neuron);
         }
@@ -90,7 +95,7 @@ public class NeuralNetwork {
     }
 
 
-    public class TrainData {
+    public static class TrainData {
         private final List<Double> input;
         private final List<Double> output;
 
@@ -105,6 +110,24 @@ public class NeuralNetwork {
 
         public List<Double> getOutput() {
             return output;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            TrainData trainData = (TrainData) o;
+            return Objects.equals(input, trainData.input) &&
+                    Objects.equals(output, trainData.output);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(input, output);
         }
     }
 }
